@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BINGO GLS DAS ESTRELAS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1);
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 40px;
+            font-family: 'Pacifico', cursive;
+            color: #ff007f;
+            text-shadow: 3px 3px 15px white;
+        }
+        button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
+        button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            box-shadow: 0 0 15px #ff007f;
+        }
+        .numero {
+            font-size: 80px;
+            font-weight: bold;
+            margin: 20px;
+            color: #ff007f;
+            transition: transform 0.3s;
+        }
+        .numero.sorteado {
+            transform: scale(1.3);
+        }
+        .sorteados {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .sorteados span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ff007f;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .image-container {
+            margin-top: 20px;
+            position: relative;
+        }
+        .image-container img {
+            width: 150px;
+            border-radius: 50%;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <h1>BINGO GLS DAS ESTRELAS</h1>
+    <div class="image-container">
+        <img src="kaSPNq90_400x400.jpg" alt="Gato Estrela">
+    </div>
+    <button onclick="sortearNumero()">🌟 Sortear Número 🌟</button>
+    <button onclick="encerrarRodada()">💫 Encerrar Rodada 💫</button>
+    <div class="numero" id="numeroSorteado">--</div>
+    <h2>Números Sorteados</h2>
+    <div class="sorteados" id="numerosSorteados"></div>
+    
+    <script>
+        let numeros = Array.from({length: 75}, (_, i) => i + 1);
+        let sorteados = [];
+
+        function sortearNumero() {
+            if (numeros.length === 0) {
+                alert("Todos os números já foram sorteados!");
+                return;
+            }
+            let indice = Math.floor(Math.random() * numeros.length);
+            let numero = numeros.splice(indice, 1)[0];
+            sorteados.push(numero);
+            let numeroSorteado = document.getElementById("numeroSorteado");
+            numeroSorteado.innerText = numero;
+            numeroSorteado.classList.add("sorteado");
+            setTimeout(() => numeroSorteado.classList.remove("sorteado"), 500);
+            atualizarSorteados();
+            falarNumero(numero);
+        }
+
+        function atualizarSorteados() {
+            let container = document.getElementById("numerosSorteados");
+            container.innerHTML = sorteados.map(num => `<span>${num}</span>`).join(" ");
+        }
+
+        function encerrarRodada() {
+            numeros = Array.from({length: 75}, (_, i) => i + 1);
+            sorteados = [];
+            document.getElementById("numeroSorteado").innerText = "--";
+            document.getElementById("numerosSorteados").innerHTML = "";
+        }
+
+        function falarNumero(numero) {
+            let synth = window.speechSynthesis;
+            let utterance = new SpeechSynthesisUtterance(`Número sorteado: ${numero}`);
+            utterance.lang = "pt-BR";
+            synth.speak(utterance);
+        }
+    </script>
+</body>
+</html>
